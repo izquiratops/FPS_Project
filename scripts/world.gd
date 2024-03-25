@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var pause_menu_scene = $PauseMenu
+@onready var hud = $HUD
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -12,19 +13,20 @@ func _process(_delta):
 
 
 func handle_pause():
-	# Pausing the game
+	# Stop and hide game logic
 	get_tree().paused = true
-	# Show the mouse cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+	hud.hide()
+
 	# Show the pause menu
 	pause_menu_scene.show()
 
 
 func handle_unpause():
-	# Resume the game
+	# Resume and show again the game logic
 	get_tree().paused = false
-	# Hide the mouse cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	hud.show()
 	# Hide pause menu
 	pause_menu_scene.hide()
 
