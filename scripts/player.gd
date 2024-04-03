@@ -22,13 +22,21 @@ const mouse_sensitivity = 0.1
 
 # Speed vars.
 var current_speed = 0.0
-const walking_speed = 5.0
+const walking_speed = 7.0
 const sprint_speed = 10.0
 const crouch_speed = 3.0
 
+# Jumping vars.
+@export_category('Jumping')
+@export var jump_height: float = 1.2
+@export var jump_peak_time: float = 0.35
+@export var jump_drop_time: float = 0.25
+var jump_gravity = (2.0 * jump_height) / pow(jump_peak_time, 2.0)
+var fall_gravity = (2.0 * jump_height) / pow(jump_drop_time, 2.0)
+var jump_velocity = jump_gravity * jump_peak_time
+
 # Movement vars.
 const lerp_speed = 15.0
-const jump_velocity = 4.5
 const crouch_depth = -0.5
 const free_look_tilt_amount = 8.0
 
@@ -49,9 +57,6 @@ const head_bobbing_crouching_intensity = 0.07
 var head_bobbing_vector = Vector2.ZERO
 var head_bobbing_index = 0.0
 var head_bobbing_current_intensity = 0.0
-
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 func _input(event):
@@ -83,7 +88,10 @@ func _physics_process(delta):
 
 	# Add the gravity.
 	if not is_on_floor():
-		velocity.y -= gravity * delta
+		if velocity.y > 0:
+			velocity.y -= jump_gravity * delta
+		else:
+			velocity.y -= fall_gravity * delta
 
 	# Handle Crouching.
 	if Input.is_action_pressed("crouch"):
