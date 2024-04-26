@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var standing_collision_shape = $StandingCollisionShape
 @onready var crouching_collision_shape = $CrouchingCollisionShape
 @onready var above_head_ray_cast = $AboveHeadRayCast
+@onready var timer = $"../HUD/Timer"
 
 # Movement states.
 var walking = true
@@ -28,9 +29,9 @@ const crouch_speed = 3.0
 
 # Jumping vars.
 @export_category('Jumping')
-@export var jump_height: float = 1.2
-@export var jump_peak_time: float = 0.35
-@export var jump_drop_time: float = 0.25
+@export var jump_height: float = 1.3
+@export var jump_peak_time: float = 0.35 # Seconds
+@export var jump_drop_time: float = 0.30 # Seconds
 var jump_gravity = (2.0 * jump_height) / pow(jump_peak_time, 2.0)
 var fall_gravity = (2.0 * jump_height) / pow(jump_drop_time, 2.0)
 var jump_velocity = jump_gravity * jump_peak_time

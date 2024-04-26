@@ -22,11 +22,12 @@ func handle_pause():
 	pause_menu_scene.show()
 
 
-func handle_unpause():
+func handle_resume():
 	# Resume and show again the game logic
 	get_tree().paused = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	hud.show()
+
 	# Hide pause menu
 	pause_menu_scene.hide()
 

@@ -1,21 +1,17 @@
-[gd_scene load_steps=28 format=3 uid="uid://dm7xg0ccwxtgr"]
+[gd_scene load_steps=24 format=3 uid="uid://dm7xg0ccwxtgr"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_11kdc"]
 [ext_resource type="Texture2D" uid="uid://7dh3ifln6v4d" path="res://assets/textures/texture_05.png" id="1_jkwyb"]
 [ext_resource type="Texture2D" uid="uid://dxvcntx03kex3" path="res://assets/textures/texture_07.png" id="2_gg4at"]
 [ext_resource type="Texture2D" uid="uid://dwmf3002bjlax" path="res://assets/hdris/partly_cloudy_puresky_2k.hdr" id="3_qxlt3"]
-[ext_resource type="Script" path="res://scripts/player_controller.gd" id="5_pa8j5"]
+[ext_resource type="Script" path="res://scripts/states/player_state.gd" id="5_u4r2g"]
 [ext_resource type="PackedScene" uid="uid://bk6camsq3rubg" path="res://scenes/pause_menu.tscn" id="6_e0cmp"]
 [ext_resource type="Shader" path="res://shaders/vignette.gdshader" id="6_q06d6"]
 [ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="6_qah2b"]
 [ext_resource type="Texture2D" uid="uid://dh2abxa1hoena" path="res://assets/textures/crosshair.png" id="7_l7f0u"]
-[ext_resource type="Script" path="res://scripts/states/idle.gd" id="7_xa20x"]
+[ext_resource type="Script" path="res://scripts/states/motion/on_ground/idle.gd" id="7_xa20x"]
 [ext_resource type="Script" path="res://scripts/timer.gd" id="8_ese8w"]
-[ext_resource type="Script" path="res://scripts/states/walk.gd" id="8_sfiu5"]
-[ext_resource type="Script" path="res://scripts/states/jump.gd" id="9_hoobc"]
-[ext_resource type="Script" path="res://scripts/states/sprint.gd" id="10_ey4kt"]
-[ext_resource type="Script" path="res://scripts/states/crouch.gd" id="11_svuvx"]
-[ext_resource type="Script" path="res://scripts/states/slide.gd" id="12_ei324"]
+[ext_resource type="Script" path="res://scripts/states/motion/on_ground/walk.gd" id="8_xskh3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qldu2"]
 resource_name = "Floor"
@@ -140,7 +136,7 @@ light_color = Color(0.496094, 0.570313, 0.6875, 1)
 shadow_enabled = true
 
 [node name="Player" type="CharacterBody3D" parent="."]
-script = ExtResource("5_pa8j5")
+script = ExtResource("5_u4r2g")
 
 [node name="StandingCollisionShape" type="CollisionShape3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -165,28 +161,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 [node name="Camera3D" type="Camera3D" parent="Player/Neck/Head/Eyes"]
 fov = 85.0
 
-[node name="StateMachine" type="Node" parent="Player"]
+[node name="State Machine" type="Node" parent="Player"]
 script = ExtResource("6_qah2b")
 
-[node name="Idle" type="Node" parent="Player/StateMachine"]
+[node name="Idle" type="Node" parent="Player/State Machine"]
 script = ExtResource("7_xa20x")
 
-[node name="Walk" type="Node" parent="Player/StateMachine"]
-script = ExtResource("8_sfiu5")
+[node name="Walk" type="Node" parent="Player/State Machine"]
+script = ExtResource("8_xskh3")
+MAX_WALK_SPEED = null
+MAX_RUN_SPEED = null
 
-[node name="Jump" type="Node" parent="Player/StateMachine"]
-script = ExtResource("9_hoobc")
+[node name="Run" type="Node" parent="Player/State Machine"]
 
-[node name="Sprint" type="Node" parent="Player/StateMachine"]
-script = ExtResource("10_ey4kt")
+[node name="Jump" type="Node" parent="Player/State Machine"]
 
-[node name="Crouch" type="Node" parent="Player/StateMachine"]
-script = ExtResource("11_svuvx")
+[node name="Crouch" type="Node" parent="Player/State Machine"]
 
-[node name="Slide" type="Node" parent="Player/StateMachine"]
-script = ExtResource("12_ei324")
+[node name="Slide" type="Node" parent="Player/State Machine"]
 
-[node name="FreeLook" type="Node" parent="Player/StateMachine"]
+[node name="FreeLook" type="Node" parent="Player/State Machine"]
 
 [node name="PostProcessing" type="CanvasLayer" parent="."]
 
@@ -254,7 +248,7 @@ text = "000"
 [node name="PauseMenu" parent="." instance=ExtResource("6_e0cmp")]
 visible = false
 
-[connection signal="pressed" from="PauseMenu/MarginContainer/VBoxContainer/ResumeButton" to="." method="handle_resume"]
+[connection signal="pressed" from="PauseMenu/MarginContainer/VBoxContainer/ResumeButton" to="." method="handle_unpause"]
 [connection signal="pressed" from="PauseMenu/MarginContainer/VBoxContainer/QuitButton" to="." method="handle_quit"]
 
 [editable path="PauseMenu"]

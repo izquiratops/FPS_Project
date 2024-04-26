@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dm7xg0ccwxtgr"]
+[gd_scene load_steps=25 format=3 uid="uid://dm7xg0ccwxtgr"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_11kdc"]
 [ext_resource type="Texture2D" uid="uid://7dh3ifln6v4d" path="res://assets/textures/texture_05.png" id="1_jkwyb"]
@@ -13,9 +13,6 @@
 [ext_resource type="Script" path="res://scripts/timer.gd" id="8_ese8w"]
 [ext_resource type="Script" path="res://scripts/states/walk.gd" id="8_sfiu5"]
 [ext_resource type="Script" path="res://scripts/states/jump.gd" id="9_hoobc"]
-[ext_resource type="Script" path="res://scripts/states/sprint.gd" id="10_ey4kt"]
-[ext_resource type="Script" path="res://scripts/states/crouch.gd" id="11_svuvx"]
-[ext_resource type="Script" path="res://scripts/states/slide.gd" id="12_ei324"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qldu2"]
 resource_name = "Floor"
@@ -177,14 +174,11 @@ script = ExtResource("8_sfiu5")
 [node name="Jump" type="Node" parent="Player/StateMachine"]
 script = ExtResource("9_hoobc")
 
-[node name="Sprint" type="Node" parent="Player/StateMachine"]
-script = ExtResource("10_ey4kt")
+[node name="Run" type="Node" parent="Player/StateMachine"]
 
 [node name="Crouch" type="Node" parent="Player/StateMachine"]
-script = ExtResource("11_svuvx")
 
 [node name="Slide" type="Node" parent="Player/StateMachine"]
-script = ExtResource("12_ei324")
 
 [node name="FreeLook" type="Node" parent="Player/StateMachine"]
 
