@@ -59,20 +59,18 @@ var head_bobbing_vector = Vector2.ZERO
 var head_bobbing_index = 0.0
 var head_bobbing_current_intensity = 0.0
 
-
 func _input(event):
 	if event is InputEventMouseMotion:
 		if free_looking:
 			# Looking left/right.
-			neck.rotate_y(deg_to_rad(-1 * mouse_sensitivity * event.relative.x))
-			neck.rotation.y = clamp(neck.rotation.y, deg_to_rad(-120), deg_to_rad(120))
+			neck.rotate_y(deg_to_rad( - 1 * mouse_sensitivity * event.relative.x))
+			neck.rotation.y = clamp(neck.rotation.y, deg_to_rad( - 120), deg_to_rad(120))
 		elif not sliding:
 			# Looking left/right.
-			rotate_y(deg_to_rad(-1 * mouse_sensitivity * event.relative.x))
+			rotate_y(deg_to_rad( - 1 * mouse_sensitivity * event.relative.x))
 			# Looking up/down.
-			head.rotate_x((deg_to_rad(-1 * mouse_sensitivity * event.relative.y)))
-			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-85), deg_to_rad(85))
-
+			head.rotate_x((deg_to_rad( - 1 * mouse_sensitivity * event.relative.y)))
+			head.rotation.x = clamp(head.rotation.x, deg_to_rad( - 85), deg_to_rad(85))
 
 func _process(delta):
 	if sliding:
@@ -81,7 +79,6 @@ func _process(delta):
 		# Updating state when timer ends.
 		if slide_timer <= 0:
 			sliding = false
-
 
 func _physics_process(delta):
 	# Get the input direction.

@@ -1,8 +1,13 @@
 extends CharacterBody3D
 
-# Node references
-@onready var state_machine = $StateMachine
+# Character state machine
+@onready var motion_states_machine = $MotionStates
+## TODO: @onready var camera_states_machine = $CameraStates
+
+# Character nodes
+@onready var neck = $Neck
 @onready var head = $Neck/Head
+@onready var camera_3d = $Neck/Head/Eyes/Camera3D
 
 # Player properties
 @export_category('Mouse')
@@ -19,45 +24,60 @@ var jump_velocity = jump_gravity * jump_peak_time
 @export_category('Lerp')
 @export() var lerp_speed = 15.0
 
+@export_category('Free Look')
+@export() var free_look_tilt_amount = 8.0
+
 # Player state
+var input_direction = Vector3.ZERO
 var current_direction = Vector3.ZERO
 var current_speed: float
-var crouch_depth = 0.0
+var crouch_depth = 0.0 # Meters
+var camera_tilt = 0.0 # Radians
 
 func _process(delta: float) -> void:
-	state_machine.update(delta)
-
+	var state = motion_states_machine.get_current_state()
+	state.update(delta)
 
 func _physics_process(delta: float) -> void:
-	state_machine.physics_update(delta)
-
+	var state = motion_states_machine.get_current_state()
+	state.physics_update(delta)
+	apply_character_physics(delta)
 
 func _unhandled_input(event: InputEvent) -> void:
+	var state = motion_states_machine.get_current_state()
+	state.handle_input(event)
+
 	if event is InputEventMouseMotion:
-		# Looking left/right.
-		rotate_y(deg_to_rad(-1 * mouse_sensitivity * event.relative.x))
-		# Looking up/down.
-		head.rotate_x((deg_to_rad(-1 * mouse_sensitivity * event.relative.y)))
-		head.rotation.x = clamp(head.rotation.x, deg_to_rad(-85), deg_to_rad(85))
+		# Looking left/right
+		rotate_y(deg_to_rad( - 1 * mouse_sensitivity * event.relative.x))
 
-	state_machine.handle_input(event)
+		# Looking up/down
+		head.rotate_x((deg_to_rad( - 1 * mouse_sensitivity * event.relative.y)))
+		head.rotation.x = clamp(head.rotation.x, deg_to_rad( - 85), deg_to_rad(85))
 
+## Get direction from WASD inputs
+func apply_input_direction() -> void:
+	var direction = Input.get_vector("left", "right", "forward", "backward")
+	input_direction = transform.basis * Vector3(direction.x, 0, direction.y).normalized()
 
-func get_input_direction() -> Vector3:
-	var input_direction = Input.get_vector("left", "right", "forward", "backward")
-	return transform.basis * Vector3(input_direction.x, 0, input_direction.y).normalized()
+## TODO: Documentation
+func apply_character_physics(delta: float) -> void:
+	# Head height and Bobbing
+	head.position.y = lerp(head.position.y, crouch_depth, delta * lerp_speed)
 
+	# Neck rotation for free-looking
+	camera_3d.rotation.z = deg_to_rad(neck.rotation.y * free_look_tilt_amount)
 
-func apply_gravity(delta: float) -> void:
+	# Apply camera tilt
+	camera_3d.rotation.z = lerp(camera_3d.rotation.z, camera_tilt, delta * lerp_speed)
+
+	# Gravity
 	if velocity.y > 0:
 		velocity.y -= jump_gravity * delta
 	else:
 		velocity.y -= fall_gravity * delta
 
-
-func apply_direction(delta: float, input_direction: Vector3) -> void:
-	head.position.y = lerp(head.position.y, crouch_depth, delta * lerp_speed)
-
+	# Direction and movement
 	current_direction = lerp(current_direction, input_direction, delta * lerp_speed)
 
 	if current_direction:
