@@ -6,6 +6,9 @@ signal state_changed(current_state)
 var states: Dictionary
 var current_state: State: get = get_current_state
 
+## TODO: Write documentation
+@export() var change_state_key = "change_state_request"
+
 func _ready():
 	_find_child_states()
 	_run_initial_state()
@@ -25,12 +28,12 @@ func get_current_state() -> State:
 
 func transition_to(target_state_id: String, data: Dictionary={}) -> void:
 	assert(states.has(target_state_id))
-	current_state.disconnect("change_state_request", self._on_change_state_request)
+	current_state.disconnect(change_state_key, _on_change_state_request)
 	current_state.leave()
 	
 	current_state = states[target_state_id]
 	current_state.init(data)
-	var res := current_state.connect("change_state_request", self._on_change_state_request)
+	var res := current_state.connect(change_state_key, _on_change_state_request)
 	assert(OK == res)
 
 # ---- Signal methods ----
@@ -45,6 +48,6 @@ func _find_child_states() -> void:
 
 func _run_initial_state() -> void:
 	current_state = get_child(0)
-	var res := current_state.connect("change_state_request", self._on_change_state_request)
+	var res := current_state.connect(change_state_key, _on_change_state_request)
 	assert(OK == res)
 	current_state.init()
