@@ -1,6 +1,6 @@
 # TODO: Rename to Motion State
-## PlayerState is a wrapper class that holds references and methods used on multiple States.
-class_name PlayerState
+## MotionState is a wrapper class that holds references and methods used on multiple States.
+class_name MotionState
 extends State
 
 # Keep all the states that extends this class on the same directory level
