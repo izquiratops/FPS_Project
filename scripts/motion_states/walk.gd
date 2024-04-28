@@ -4,8 +4,8 @@ func init(_data: Dictionary={}) -> void:
 	print('Walking')
 	player.current_speed = 7.0
 
-func update(_delta) -> void:
-	player.apply_input_direction()
+func handle_input(_event) -> void:
+	wasd_update()
 
 	if player.input_direction.is_zero_approx():
 		emit_signal("change_state_request", "Idle")

@@ -4,12 +4,12 @@ func init(_data: Dictionary={}) -> void:
 	print('Jump')
 	# Player can move at least at 7.0 (walking speed value)
 	player.current_speed = max(player.current_speed, 7.0)
-	# TODO: 🤔
+	# Add vertical velocity to jump
 	player.velocity.y = player.jump_gravity * player.jump_peak_time
 
-func update(_delta) -> void:
+func handle_input(_event) -> void:
 	# Player can still change direction mid-air
-	player.apply_input_direction()
+	wasd_update()
 
 	# Jump ends when character touch the floor
 	if player.is_on_floor():

@@ -5,12 +5,12 @@ func init(_data: Dictionary={}) -> void:
 	player.current_speed = 3.0
 
 	# Ducking head
-	player.crouch_depth = -0.5
+	player.current_crouch_depth = -0.5
 	standing_collision_shape.disabled = true
 	crouching_collision_shape.disabled = false
 
-func update(_delta) -> void:
-	player.apply_input_direction()
+func handle_input(_event) -> void:
+	wasd_update()
 
 	# Player can jump while crouching
 	if Input.is_action_just_pressed("jump") and can_jump():
@@ -27,6 +27,6 @@ func update(_delta) -> void:
 
 func leave() -> void:
 	# Setting the character head back to default values
-	player.crouch_depth = 0.0
+	player.current_crouch_depth = 0.0
 	crouching_collision_shape.disabled = true
 	standing_collision_shape.disabled = false

@@ -4,8 +4,8 @@ func init(_data: Dictionary={}) -> void:
 	print('Idle')
 	player.current_speed = 0.0
 
-func update(_delta) -> void:
-	player.apply_input_direction()
+func handle_input(_event) -> void:
+	wasd_update()
 
 	if Input.is_action_pressed("crouch"):
 		emit_signal("change_state_request", "Crouch")

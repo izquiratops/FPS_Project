@@ -4,8 +4,8 @@ func init(_data: Dictionary={}) -> void:
 	print('Sprint')
 	player.current_speed = 12.0
 
-func update(_delta) -> void:
-	player.apply_input_direction()
+func handle_input(_event) -> void:
+	wasd_update()
 
 	# Slides when crouch while sprinting
 	if Input.is_action_pressed("crouch"):

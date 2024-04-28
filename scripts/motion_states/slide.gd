@@ -12,17 +12,16 @@ extends MotionState
 func init(_data: Dictionary={}) -> void:
 	print('Slide')
 	slide_timer.start()
-	player.apply_input_direction()
 
 	# Tilting camera
-	player.camera_tilt = slide_camera_tilt
+	player.current_camera_tilt = slide_camera_tilt
 
 	# Ducking head
-	player.crouch_depth = -0.5
+	player.current_crouch_depth = -0.5
 	standing_collision_shape.disabled = true
 	crouching_collision_shape.disabled = false
 
-func update(_delta) -> void:
+func handle_input(_event) -> void:
 	# Decrease the speed over time until reach a minimum amount
 	player.current_speed = max(slide_speed * slide_timer.time_left, slide_speed_min)
 
@@ -43,15 +42,16 @@ func leave() -> void:
 	slide_timer.stop()
 
 	# Undo camera tilt
-	player.camera_tilt = 0.0
+	player.current_camera_tilt = 0.0
 
 	# Stand up
-	player.crouch_depth = 0.0
+	player.current_crouch_depth = 0.0
 	standing_collision_shape.disabled = false
 	crouching_collision_shape.disabled = true
 
-## TODO: Write documentation
+# Tied to the Timer timeout() signal
 func slide_ends() -> void:
 	print('Slide timeout')
+
 	# The player will crouch after the slide ends by default
 	emit_signal("change_state_request", "Crouch")
