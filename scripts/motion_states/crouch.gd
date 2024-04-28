@@ -14,16 +14,16 @@ func update(_delta) -> void:
 
 	# Player can jump while crouching
 	if Input.is_action_just_pressed("jump") and can_jump():
-		emit_signal(state_machine.change_state_key, "Jump")
+		emit_signal("change_state_request", "Jump")
 
 	# Change state whenever the crouch button is not pressed anymore
 	elif not Input.is_action_pressed("crouch"):
 		if player.input_direction.is_zero_approx():
-			emit_signal(state_machine.change_state_key, "Idle")
+			emit_signal("change_state_request", "Idle")
 		elif Input.is_action_pressed("sprint"):
-			emit_signal(state_machine.change_state_key, "Sprint")
+			emit_signal("change_state_request", "Sprint")
 		else:
-			emit_signal(state_machine.change_state_key, "Walk")
+			emit_signal("change_state_request", "Walk")
 
 func leave() -> void:
 	# Setting the character head back to default values

@@ -15,10 +15,10 @@ func update(_delta: float) -> void:
 func physics_update(_delta: float) -> void:
 	return
 
-# On init life cycle
+# On init lifecycle
 func init(_data: Dictionary={}) -> void:
 	return
 
-# On leave life cycle
+# On leave lifecycle
 func leave() -> void:
 	return

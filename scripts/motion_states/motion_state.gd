@@ -1,4 +1,3 @@
-# TODO: Rename to Motion State
 ## MotionState is a wrapper class that holds references and methods used on multiple States.
 class_name MotionState
 extends State
@@ -8,8 +7,8 @@ extends State
 #   ⤷ Motion States (State Machine)
 #       ⤷ Idle State (Player is '../..' from Idle state)
 #       ⤷ Walk State (Same route)
-@onready var player = $'../..'
-@onready var state_machine = $'..'
+@onready var player: PlayerController = $'../..'
+@onready var state_machine: StateMachine = $'..'
 
 @onready var above_head_ray_cast = $'../../AboveHeadRayCast'
 @onready var standing_collision_shape = $'../../StandingCollisionShape'

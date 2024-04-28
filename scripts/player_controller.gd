@@ -1,3 +1,4 @@
+class_name PlayerController
 extends CharacterBody3D
 
 # Character state machine
@@ -13,16 +14,15 @@ extends CharacterBody3D
 @export_category('Mouse')
 @export() var mouse_sensitivity = 0.1
 
-@export_category('Jumping')
-@export() var jump_height = 2.0 # Meters
-@export() var jump_peak_time = 0.35 # Seconds
-@export() var jump_drop_time = 0.30 # Seconds
-var jump_gravity = (2.0 * jump_height) / pow(jump_peak_time, 2.0)
-var fall_gravity = (2.0 * jump_height) / pow(jump_drop_time, 2.0)
-var jump_velocity = jump_gravity * jump_peak_time
-
 @export_category('Lerp')
 @export() var lerp_speed = 15.0
+
+@export_category('Gravity')
+@export() var jump_peak_height = 2.0 # Meters
+@export() var jump_peak_time = 0.35 # Seconds
+@export() var jump_drop_time = 0.30 # Seconds
+var jump_gravity = (2.0 * jump_peak_height) / pow(jump_peak_time, 2.0)
+var fall_gravity = (2.0 * jump_peak_height) / pow(jump_drop_time, 2.0)
 
 @export_category('Free Look')
 @export() var free_look_tilt_amount = 8.0
@@ -55,18 +55,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		head.rotate_x((deg_to_rad( - 1 * mouse_sensitivity * event.relative.y)))
 		head.rotation.x = clamp(head.rotation.x, deg_to_rad( - 85), deg_to_rad(85))
 
-## Get direction from WASD inputs
 func apply_input_direction() -> void:
 	var direction = Input.get_vector("left", "right", "forward", "backward")
 	input_direction = transform.basis * Vector3(direction.x, 0, direction.y).normalized()
 
-## TODO: Documentation
 func apply_character_physics(delta: float) -> void:
 	# Head height and Bobbing
 	head.position.y = lerp(head.position.y, crouch_depth, delta * lerp_speed)
 
-	# Neck rotation for free-looking
-	camera_3d.rotation.z = deg_to_rad(neck.rotation.y * free_look_tilt_amount)
+	# TODO: Neck rotation for free-looking
+	# camera_3d.rotation.z = deg_to_rad(neck.rotation.y * free_look_tilt_amount)
 
 	# Apply camera tilt
 	camera_3d.rotation.z = lerp(camera_3d.rotation.z, camera_tilt, delta * lerp_speed)

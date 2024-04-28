@@ -1,7 +1,7 @@
 extends MotionState
 
 @export_category("Tilt")
-@export() var slide_camera_tilt = -deg_to_rad(5.0)
+@export() var slide_camera_tilt = -deg_to_rad(10.0)
 
 @export_category("Timer")
 @export() var slide_timer: Timer
@@ -28,14 +28,14 @@ func update(_delta) -> void:
 
 	# Player can jump while sliding, just like crouching
 	if Input.is_action_just_pressed("jump") and can_jump():
-		emit_signal(state_machine.change_state_key, "Jump")
+		emit_signal("change_state_request", "Jump")
 
 	# Standing up mid-slide
 	elif not Input.is_action_pressed("crouch"):
 		if Input.is_action_pressed("sprint"):
-			emit_signal(state_machine.change_state_key, "Sprint")
+			emit_signal("change_state_request", "Sprint")
 		else:
-			emit_signal(state_machine.change_state_key, "Walk")
+			emit_signal("change_state_request", "Walk")
 
 func leave() -> void:
 	print('Slide ends')
@@ -54,4 +54,4 @@ func leave() -> void:
 func slide_ends() -> void:
 	print('Slide timeout')
 	# The player will crouch after the slide ends by default
-	emit_signal(state_machine.change_state_key, "Crouch")
+	emit_signal("change_state_request", "Crouch")

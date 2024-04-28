@@ -9,14 +9,14 @@ func update(_delta) -> void:
 
 	# Slides when crouch while sprinting
 	if Input.is_action_pressed("crouch"):
-		emit_signal(state_machine.change_state_key, "Slide")
+		emit_signal("change_state_request", "Slide")
 
 	elif Input.is_action_just_pressed("jump") and can_jump():
-		emit_signal(state_machine.change_state_key, "Jump")
+		emit_signal("change_state_request", "Jump")
 
 	# Letting go shift key
 	elif not Input.is_action_pressed("sprint"):
 		if player.input_direction.is_zero_approx():
-			emit_signal(state_machine.change_state_key, "Idle")
+			emit_signal("change_state_request", "Idle")
 		else:
-			emit_signal(state_machine.change_state_key, "Walk")
+			emit_signal("change_state_request", "Walk")
