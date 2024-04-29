@@ -14,6 +14,7 @@ Player (Controller)
 @onready var state_machine: StateMachine = $'..'
 
 @onready var head: Node3D = $'../../Neck/Head'
+@onready var eyes: Node3D = $'../../Neck/Head/Eyes'
 @onready var above_head_ray_cast: RayCast3D = $'../../AboveHeadRayCast'
 @onready var standing_collision_shape: CollisionShape3D = $'../../StandingCollisionShape'
 @onready var crouching_collision_shape: CollisionShape3D = $'../../CrouchingCollisionShape'
@@ -44,6 +45,13 @@ func physics_update(delta: float) -> void:
 func wasd_update() -> void:
 	var direction = Input.get_vector("left", "right", "forward", "backward")
 	player.input_direction = player.transform.basis * Vector3(direction.x, 0, direction.y).normalized()
+
+func bobbing_update(delta: float) -> void:
+	var target_bobbing_y = sin(player.bobbing_index) * player.current_bobbing_intensity
+	var target_bobbing_x = cos(player.bobbing_index * 0.5) * player.current_bobbing_intensity
+
+	eyes.position.x = lerp(eyes.position.x, target_bobbing_x, delta * player.lerp_speed)
+	eyes.position.y = lerp(eyes.position.y, target_bobbing_y, delta * player.lerp_speed)
 
 func can_jump() -> bool:
 	return player.is_on_floor() and not above_head_ray_cast.is_colliding()

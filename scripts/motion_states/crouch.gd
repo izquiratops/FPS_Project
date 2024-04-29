@@ -1,13 +1,21 @@
 extends MotionState
 
+@export() var bobbing_speed = 8.0
+@export() var bobbing_intensity = 0.07
+
 func init(_data: Dictionary={}) -> void:
 	print('Crouch')
 	player.current_speed = 3.0
+	player.current_bobbing_intensity = bobbing_intensity
 
 	# Ducking head
 	player.current_crouch_depth = -0.5
 	standing_collision_shape.disabled = true
 	crouching_collision_shape.disabled = false
+
+func update(delta):
+	player.bobbing_index += bobbing_speed * delta
+	bobbing_update(delta)
 
 func handle_input(_event) -> void:
 	wasd_update()
