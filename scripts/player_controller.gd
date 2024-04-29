@@ -16,17 +16,15 @@ extends CharacterBody3D
 @export() var jump_peak_height = 2.0 # Meters
 @export() var jump_peak_time = 0.35 # Seconds
 @export() var jump_drop_time = 0.30 # Seconds
-var jump_gravity = (2.0 * jump_peak_height) / pow(jump_peak_time, 2.0)
-var fall_gravity = (2.0 * jump_peak_height) / pow(jump_drop_time, 2.0)
 
 # Player state
 var input_direction = Vector3.ZERO
 var current_direction = Vector3.ZERO
-var current_speed: float
+var current_speed = 0.0
 var current_crouch_depth = 0.0 # Meters
 var current_camera_tilt = 0.0 # Radians
 var current_bobbing_intensity = 0.0
-var bobbing_index = 0.0
+var current_bobbing_index = 0.0
 
 func _process(delta: float) -> void:
 	motion_state_machine.get_current_state().update(delta)

@@ -14,7 +14,7 @@ func init(_data: Dictionary={}) -> void:
 	crouching_collision_shape.disabled = false
 
 func update(delta):
-	player.bobbing_index += bobbing_speed * delta
+	player.current_bobbing_index += bobbing_speed * delta
 	bobbing_update(delta)
 
 func handle_input(_event) -> void:

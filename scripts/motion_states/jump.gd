@@ -4,8 +4,8 @@ func init(_data: Dictionary={}) -> void:
 	print('Jump')
 	# Player can move at least at 7.0 (walking speed value)
 	player.current_speed = max(player.current_speed, 7.0)
-	# Add vertical velocity to jump
-	player.velocity.y = player.jump_gravity * player.jump_peak_time
+	# Jump up impulse 🦘
+	player.velocity.y = jump_gravity * player.jump_peak_time
 
 func handle_input(_event) -> void:
 	# Player can still change direction mid-air

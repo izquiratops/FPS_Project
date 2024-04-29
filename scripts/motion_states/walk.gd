@@ -9,7 +9,7 @@ func init(_data={}) -> void:
 	player.current_bobbing_intensity = bobbing_intensity
 
 func update(delta):
-	player.bobbing_index += bobbing_speed * delta
+	player.current_bobbing_index += bobbing_speed * delta
 	bobbing_update(delta)
 
 func handle_input(_event) -> void:

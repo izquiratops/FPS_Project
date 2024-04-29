@@ -19,15 +19,19 @@ Player (Controller)
 @onready var standing_collision_shape: CollisionShape3D = $'../../StandingCollisionShape'
 @onready var crouching_collision_shape: CollisionShape3D = $'../../CrouchingCollisionShape'
 
+# Declare vars after loading 'player'
+@onready var jump_gravity = (2.0 * player.jump_peak_height) / pow(player.jump_peak_time, 2.0)
+@onready var fall_gravity = (2.0 * player.jump_peak_height) / pow(player.jump_drop_time, 2.0)
+
 func physics_update(delta: float) -> void:
 	# Head height and Bobbing
 	head.position.y = lerp(head.position.y, player.current_crouch_depth, delta * player.lerp_speed)
 
 	# Gravity
 	if player.velocity.y > 0:
-		player.velocity.y -= player.jump_gravity * delta
+		player.velocity.y -= jump_gravity * delta
 	else:
-		player.velocity.y -= player.fall_gravity * delta
+		player.velocity.y -= fall_gravity * delta
 
 	# Apply input WASD direction to the current
 	player.current_direction = lerp(player.current_direction, player.input_direction, delta * player.lerp_speed)
@@ -47,8 +51,8 @@ func wasd_update() -> void:
 	player.input_direction = player.transform.basis * Vector3(direction.x, 0, direction.y).normalized()
 
 func bobbing_update(delta: float) -> void:
-	var target_bobbing_y = sin(player.bobbing_index) * player.current_bobbing_intensity
-	var target_bobbing_x = cos(player.bobbing_index * 0.5) * player.current_bobbing_intensity
+	var target_bobbing_y = sin(player.current_bobbing_index) * player.current_bobbing_intensity
+	var target_bobbing_x = cos(player.current_bobbing_index * 0.5) * player.current_bobbing_intensity
 
 	eyes.position.x = lerp(eyes.position.x, target_bobbing_x, delta * player.lerp_speed)
 	eyes.position.y = lerp(eyes.position.y, target_bobbing_y, delta * player.lerp_speed)
