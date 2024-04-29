@@ -13,10 +13,10 @@ Player (Controller)
 @onready var player: PlayerController = $'../..'
 @onready var state_machine: StateMachine = $'..'
 
-@onready var head = $'../../Neck/Head'
-@onready var above_head_ray_cast = $'../../AboveHeadRayCast'
-@onready var standing_collision_shape = $'../../StandingCollisionShape'
-@onready var crouching_collision_shape = $'../../CrouchingCollisionShape'
+@onready var head: Node3D = $'../../Neck/Head'
+@onready var above_head_ray_cast: RayCast3D = $'../../AboveHeadRayCast'
+@onready var standing_collision_shape: CollisionShape3D = $'../../StandingCollisionShape'
+@onready var crouching_collision_shape: CollisionShape3D = $'../../CrouchingCollisionShape'
 
 func physics_update(delta: float) -> void:
 	# Head height and Bobbing

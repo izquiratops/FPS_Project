@@ -7,6 +7,10 @@ func update(delta) -> void:
 	# Apply camera tilt
 	camera_3d.rotation.z = lerp(camera_3d.rotation.z, player.current_camera_tilt, delta * player.lerp_speed)
 
+	# Apply lerp to rotate back to 0 when the user leave free-look state
+	if (neck.rotation.y != 0.0):
+		neck.rotation.y = lerp(neck.rotation.y, 0.0, delta * player.lerp_speed)
+
 func handle_input(event) -> void:
 	if event is InputEventMouseMotion:
 		# Looking left/right
