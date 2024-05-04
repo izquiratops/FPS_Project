@@ -10,7 +10,6 @@ extends MotionState
 @export() var slide_speed_min = 2.0
 
 func init(_data: Dictionary={}) -> void:
-	print('Slide')
 	slide_timer.start()
 
 	# Tilting camera
@@ -37,7 +36,6 @@ func handle_input(_event) -> void:
 			emit_signal("change_state_request", "Walk")
 
 func leave() -> void:
-	print('Slide ends')
 	# Make sure to stop the timer if we're leaving mid-slide
 	slide_timer.stop()
 
@@ -51,7 +49,5 @@ func leave() -> void:
 
 # Tied to the Timer timeout() signal
 func slide_ends() -> void:
-	print('Slide timeout')
-
 	# The player will crouch after the slide ends by default
 	emit_signal("change_state_request", "Crouch")

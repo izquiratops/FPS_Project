@@ -1,11 +1,11 @@
 extends MotionState
 
+@export() var moving_speed = 12.0
 @export() var bobbing_speed = 18.0
 @export() var bobbing_intensity = 0.1
 
 func init(_data: Dictionary={}) -> void:
-	print('Sprint')
-	player.current_speed = 12.0
+	player.current_speed = moving_speed
 	player.current_bobbing_intensity = bobbing_intensity
 
 func update(delta):

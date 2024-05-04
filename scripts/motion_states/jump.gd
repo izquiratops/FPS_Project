@@ -1,9 +1,10 @@
 extends MotionState
 
+@export() var moving_speed_limit = 7.0
+
 func init(_data: Dictionary={}) -> void:
-	print('Jump')
 	# Player can move at least at 7.0 (walking speed value)
-	player.current_speed = max(player.current_speed, 7.0)
+	player.current_speed = max(player.current_speed, moving_speed_limit)
 	# Jump up impulse 🦘
 	player.velocity.y = jump_gravity * player.jump_peak_time
 

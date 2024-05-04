@@ -1,0 +1,80 @@
+[gd_scene load_steps=13 format=3 uid="uid://8n7f8y6goj43"]
+
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="1_x6ykw"]
+[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_o8drm"]
+[ext_resource type="Script" path="res://scripts/motion_states/idle.gd" id="3_awase"]
+[ext_resource type="Script" path="res://scripts/motion_states/walk.gd" id="4_hj2yk"]
+[ext_resource type="Script" path="res://scripts/motion_states/jump.gd" id="5_6qey3"]
+[ext_resource type="Script" path="res://scripts/motion_states/sprint.gd" id="6_dduuq"]
+[ext_resource type="Script" path="res://scripts/motion_states/crouch.gd" id="7_46acw"]
+[ext_resource type="Script" path="res://scripts/motion_states/slide.gd" id="8_xnxsf"]
+[ext_resource type="Script" path="res://scripts/camera_states/default.gd" id="9_htrdv"]
+[ext_resource type="Script" path="res://scripts/camera_states/free_look.gd" id="10_hcvwh"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1lroy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vxkag"]
+height = 1.3
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_x6ykw")
+
+[node name="SlideTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_1lroy")
+
+[node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+shape = SubResource("CapsuleShape3D_vxkag")
+disabled = true
+
+[node name="AboveHeadRayCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+target_position = Vector3(0, 0.5, 0)
+
+[node name="Neck" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Head" type="Node3D" parent="Neck"]
+
+[node name="Eyes" type="Node3D" parent="Neck/Head"]
+
+[node name="Camera3D" type="Camera3D" parent="Neck/Head/Eyes"]
+fov = 85.0
+
+[node name="MotionStates" type="Node" parent="."]
+script = ExtResource("2_o8drm")
+
+[node name="Idle" type="Node" parent="MotionStates"]
+script = ExtResource("3_awase")
+
+[node name="Walk" type="Node" parent="MotionStates"]
+script = ExtResource("4_hj2yk")
+
+[node name="Jump" type="Node" parent="MotionStates"]
+script = ExtResource("5_6qey3")
+
+[node name="Sprint" type="Node" parent="MotionStates"]
+script = ExtResource("6_dduuq")
+
+[node name="Crouch" type="Node" parent="MotionStates"]
+script = ExtResource("7_46acw")
+
+[node name="Slide" type="Node" parent="MotionStates" node_paths=PackedStringArray("slide_timer")]
+script = ExtResource("8_xnxsf")
+slide_timer = NodePath("../../SlideTimer")
+
+[node name="CameraStates" type="Node" parent="."]
+script = ExtResource("2_o8drm")
+
+[node name="Default" type="Node" parent="CameraStates"]
+script = ExtResource("9_htrdv")
+
+[node name="FreeLook" type="Node" parent="CameraStates"]
+script = ExtResource("10_hcvwh")
+
+[connection signal="timeout" from="SlideTimer" to="MotionStates/Slide" method="slide_ends"]

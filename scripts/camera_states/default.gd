@@ -1,7 +1,7 @@
 extends CameraState
 
 func init(_data: Dictionary={}) -> void:
-	print('Default Camera')
+	pass
 
 func update(delta) -> void:
 	# Apply camera tilt

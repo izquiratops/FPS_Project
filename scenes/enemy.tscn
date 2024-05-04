@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3 uid="uid://ctquq01q8aix0"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_wtvdc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kssrw"]
+albedo_color = Color(0.443914, 0.659761, 0.40013, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4yd2e"]
+material = SubResource("StandardMaterial3D_kssrw")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5h06u"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f0jgj"]
+points = PackedVector3Array(-0.000195742, 0, -0.000195742, 0.382537, -2, -0.924041, -0.000195742, -2, -1, -0.382733, -2, -0.924041, -0.707126, -2, -0.707126, -0.924041, -2, -0.382733, -1, -2, -0.000195742, -0.924041, -2, 0.382537, -0.707126, -2, 0.70693, -0.382733, -2, 0.923845, -0.000195742, -2, 1, 0.382537, -2, 0.923845, 0.70693, -2, 0.70693, 0.923845, -2, 0.382537, 1, -2, -0.000195742, 0.923845, -2, -0.382733, 0.70693, -2, -0.707126)
+
+[node name="Enemy" type="CharacterBody3D" groups=["Enemies"]]
+script = ExtResource("1_wtvdc")
+
+[node name="IntervalTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="EnemyBody" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_4yd2e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_5h06u")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_height_offset = 0.25
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="VisionRayCast" type="RayCast3D" parent="Head"]
+target_position = Vector3(0, 0, 2)
+debug_shape_custom_color = Color(0.458824, 0.678431, 0.843137, 1)
+debug_shape_thickness = 5
+
+[node name="VisionArea" type="Area3D" parent="Head"]
+
+[node name="CollisionArea" type="CollisionShape3D" parent="Head/VisionArea"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_f0jgj")
+
+[connection signal="timeout" from="IntervalTimer" to="." method="lookForEnemies"]

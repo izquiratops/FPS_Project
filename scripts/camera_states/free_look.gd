@@ -3,7 +3,7 @@ extends CameraState
 @export() var tilt_amount = 8.0
 
 func init(_data: Dictionary={}) -> void:
-	print('FreeLook Camera')
+	pass
 
 func handle_input(event) -> void:
 	if event is InputEventMouseMotion:

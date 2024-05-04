@@ -1,8 +1,9 @@
 extends MotionState
 
+@export() var moving_speed = 0.0
+
 func init(_data: Dictionary={}) -> void:
-	print('Idle')
-	player.current_speed = 0.0
+	player.current_speed = moving_speed
 
 func handle_input(_event) -> void:
 	wasd_update()
