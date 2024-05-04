@@ -1,6 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://ctquq01q8aix0"]
+[gd_scene load_steps=10 format=3 uid="uid://ctquq01q8aix0"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_wtvdc"]
+[ext_resource type="Script" path="res://scripts/vision_interval.gd" id="2_1ufie"]
+[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_wr3xb"]
+[ext_resource type="Script" path="res://scripts/enemy_states/idle.gd" id="3_i3tma"]
+[ext_resource type="Script" path="res://scripts/enemy_states/chase.gd" id="4_f5dn5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kssrw"]
 albedo_color = Color(0.443914, 0.659761, 0.40013, 1)
@@ -17,7 +21,9 @@ points = PackedVector3Array(-0.000195742, 0, -0.000195742, 0.382537, -2, -0.9240
 script = ExtResource("1_wtvdc")
 
 [node name="IntervalTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 2.0
+autostart = true
+script = ExtResource("2_1ufie")
 
 [node name="EnemyBody" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -34,14 +40,24 @@ path_height_offset = 0.25
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="VisionRayCast" type="RayCast3D" parent="Head"]
-target_position = Vector3(0, 0, 2)
+target_position = Vector3(0, 0, 10)
 debug_shape_custom_color = Color(0.458824, 0.678431, 0.843137, 1)
 debug_shape_thickness = 5
 
 [node name="VisionArea" type="Area3D" parent="Head"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 
 [node name="CollisionArea" type="CollisionShape3D" parent="Head/VisionArea"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_f0jgj")
 
-[connection signal="timeout" from="IntervalTimer" to="." method="lookForEnemies"]
+[node name="EnemyStates" type="Node" parent="."]
+script = ExtResource("2_wr3xb")
+
+[node name="Idle" type="Node" parent="EnemyStates"]
+script = ExtResource("3_i3tma")
+
+[node name="Chase" type="Node" parent="EnemyStates"]
+script = ExtResource("4_f5dn5")
+
+[connection signal="timeout" from="IntervalTimer" to="IntervalTimer" method="_on_timeout"]

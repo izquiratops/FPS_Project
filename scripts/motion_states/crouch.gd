@@ -13,7 +13,7 @@ func init(_data: Dictionary={}) -> void:
 	standing_collision_shape.disabled = true
 	crouching_collision_shape.disabled = false
 
-func update(delta):
+func update(delta) -> void:
 	if not player.input_direction.is_zero_approx():
 		player.current_bobbing_index += bobbing_speed * delta
 		bobbing_update(delta)
